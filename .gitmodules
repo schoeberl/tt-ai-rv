@@ -1,0 +1,3 @@
+[submodule "tools/librelane"]
+	path = tools/librelane
+	url = https://github.com/librelane/librelane.git

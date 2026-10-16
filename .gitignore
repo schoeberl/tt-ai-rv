@@ -1,0 +1,5 @@
+# Local physical-design dependencies and results
+/pdk/
+/.venv/
+/runs/
+/flow/runs/
