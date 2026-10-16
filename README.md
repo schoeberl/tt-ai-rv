@@ -37,3 +37,39 @@ Nix and Ciel may download substantial tool and PDK data. The PDK and generated
 runs are ignored by Git. The smoke test checks tool installation; project area
 estimates will require generated RTL and a Tiny Tapeout floorplan configuration.
 No core hardening or area estimate has been run yet.
+
+## Counter submission MVP
+
+The current submission is an **8-bit counter** using one `1x1` tile. The RISC-V
+core and memory interface are future work. This first MVP uses Verilog directly;
+we will replace it with generated RTL when adding the Chisel implementation.
+
+- `src/project.v`: standard Tiny Tapeout wrapper and counter.
+- `info.yaml`: submission metadata, source list, and pin descriptions.
+- `docs/info.md`: placeholder datasheet describing the counter accurately.
+- `test/`: Cocotb tests for RTL and the hardened gate-level netlist.
+- `.github/workflows/`: RTL tests, datasheet generation, GDS build, precheck,
+  gate-level tests, and layout viewer deployment, using the official TTSKY26d actions.
+
+Run the simulation locally (requires Python 3.11+ and Icarus Verilog):
+
+```sh
+python3 -m venv .venv
+.venv/bin/pip install -r test/requirements.txt
+export PATH="$PWD/.venv/bin:$PATH"
+make -C test
+python -m cocotb_tools.check_results test/results.xml
+```
+
+The GDS workflow explicitly selects the pinned LibreLane version rather than
+the action's moving default. The action manages its CI PDK installation; local
+PDK pins remain in `flow/toolchain.env`. The workflows follow the
+[official SKY130 template](https://github.com/TinyTapeout/ttsky-verilog-template).
+
+After pushing, inspect the GitHub Actions results, particularly GDS, precheck,
+and gate-level tests. In repository Settings → Pages, choose **GitHub Actions**
+as the build source to enable the layout viewer. Once the build is green, we can
+create the project together at [Tiny Tapeout](https://app.tinytapeout.com/),
+select **TTSKY26d**, and connect this repository. No website submission has been
+made yet. The counter metadata and documentation must be updated when the CPU
+replaces the MVP.

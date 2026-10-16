@@ -3,3 +3,13 @@
 /.venv/
 /runs/
 /flow/runs/
+*.vcd
+*.fst
+*.fst.hier
+/test/sim_build/
+/test/__pycache__/
+/test/results.xml
+/test/gate_level_netlist.v
+/src/user_config.json
+/src/config_merged.json
+/tt_submission/
